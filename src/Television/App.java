@@ -5,6 +5,13 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        Television tv1 = new Television("Samsung", 2019, false);
+        Television tv2 = new Television("Philips", 2024, true);
+        Television tv3 = new Television("Лидер", 2013, false);
+        System.out.println(tv1);
+        System.out.println(tv2);
+        System.out.println(tv3);
+
         System.out.println("Пожалуйста, введите название телевизора: ");
         String name = sc.nextLine();
         System.out.println("Пожалуйста, введите год выпуска телевизора: ");
@@ -19,6 +26,8 @@ public class App {
         boolean sm1 = tv.isSmart();
 
         System.out.println("Ваш телевизор - " + name1 + ", " + age1 + " года выпуска, смарт - " + sm1);
+
+
 
 
     }
