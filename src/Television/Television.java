@@ -3,12 +3,12 @@ package Television;
 public class Television {
     private String brand;
     private int year;
-    private boolean Smart;
+    private boolean smart;
 
-    public Television(String brand, int year, boolean Smart) {
+    public Television(String brand, int year, boolean smart) {
         this.brand = brand;
         this.year = year;
-        this.Smart = Smart;
+        this.smart = smart;
     }
     public String getBrand() {
         return brand;
@@ -23,13 +23,13 @@ public class Television {
         this.year = year;
     }
     public boolean isSmart() {
-        return Smart;
+        return smart;
     }
-    public void setSmart(boolean Smart) {
-        this.Smart = Smart;
+    public void setSmart(boolean smart) {
+        this.smart = smart;
     }
 
     public String toString() {
-        return "Телевизор " + brand + ", " + year + " года, " + "Смарт - " + Smart;
+        return "Телевизор " + brand + ", " + year + " года, " + "Смарт - " + smart;
     }
 }
