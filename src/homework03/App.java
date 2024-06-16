@@ -1,4 +1,4 @@
-package Television;
+package homework03;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package dom.zadan06june;
+package homework04;
 import java.util.Scanner;
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package ru.Innopolis.java;
+package homework02;
 
 public class Dom3Zadan30may {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package Television;
+package homework03;
 
 public class Television {
     private String brand;
