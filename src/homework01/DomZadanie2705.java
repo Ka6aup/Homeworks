@@ -1,3 +1,5 @@
+package homework01;
+
 public class DomZadanie2705 {
     public static void main(String[] args) {
         int petya = (int) (Math.random() * 3);

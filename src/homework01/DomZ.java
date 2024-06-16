@@ -1,3 +1,4 @@
+package homework01;
 
 public class DomZ {
     public static void main(String[] args) {
