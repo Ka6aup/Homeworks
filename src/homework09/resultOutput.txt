@@ -1,0 +1,18 @@
+Машины гоночные PerformanceCar:
+Car[brand='Bugatti', model='Verona', manufactureYear=2006, power=1800, acceleration=420, suspension=66, durability=15, addOns=[]]
+Car[brand='Lamborghini', model='Hurricane', manufactureYear=2014, power=900, acceleration=380, suspension=67, durability=13, addOns=[]]
+Car[brand='Mercedes', model='SLS', manufactureYear=2010, power=750, acceleration=410, suspension=63, durability=14, addOns=[]]
+Машины спортивные ShowCar.Looking cool there. bro.:
+Car[brand='Dodge', model='Viper', manufactureYear=2015, power=645, acceleration=359, suspension=70, durability=10, stars=0]
+Car[brand='Lotus', model='Exile', manufactureYear=2001, power=190, acceleration=260, suspension=62, durability=20, stars=0]
+Машины в гараже: [Car[brand='Lamborghini', model='Hurricane', manufactureYear=2014, power=900, acceleration=380, suspension=67, durability=13, addOns=[]]]
+Тип гонок CasualRace
+Race[type='CasualRace', distance=60, route='route1', prizeFound=100000, cars=[]]
+Тип гонок DragRace
+Race[type='DragRace', distance=90, route='route2', prizeFound=200000, cars=[]]
+Тип гонок DriftRace
+Race[type='DriftRace', distance=40, route='route3', prizeFound=140000, cars=[]]
+Тип гонок TimeLimitRace
+Race[type='TimeLimitRace', distance=80, route='route4', prizeFound=150000, cars=[]]
+Тип гонок CircuitRace
+Race[type='CircuitRace', distance=70, route='route5', prizeFound=170000, cars=[]]

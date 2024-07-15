@@ -1,0 +1,5 @@
+Bugatti | Verona | 2006 | 1200 | 420 | 89 | 15
+Dodge | Viper | 2015 | 645 | 359 | 70 | 10
+Lamborghini | Hurricane | 2014 | 602 | 380 | 90 | 13
+Lotus | Exile | 2001 | 190 | 260 | 62 | 20
+Mercedes | SLS | 2010 | 569 | 410 | 85 | 14
