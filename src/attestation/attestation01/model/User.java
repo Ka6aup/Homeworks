@@ -1,166 +1,166 @@
 package attestation.attestation01.model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-
-import static attestation.attestation01.repositories.UsersRepository.LOCAL_DATE_FORMATTER_PATTERN;
-import static attestation.attestation01.repositories.UsersRepository.USER_PARAMS_DIVIDER;
+import java.util.regex.Pattern;
 
 public class User {
     private String id;
-    private LocalDateTime localDateTime = LocalDateTime.now();
+    private LocalDateTime dateAdded;
     private String login;
     private String password;
     private String confirmPassword;
-    private String surname;
-    private String name;
-    private String patronymic;
+    private String lastName;
+    private String firstName;
+    private String middleName;
     private Integer age;
-    private Boolean isWorker = false;
+    private boolean isWorker;
 
-    public User() {}
-
-    public User(
-            String id,
-            LocalDateTime localDateTime,
-            String login,
-            String password,
-            String confirmPassword,
-            String surname,
-            String name,
-            String patronymic,
-            Integer age,
-            Boolean isWorker) {
+    public User(String id, LocalDateTime dateAdded, String login, String password,
+                String confirmPassword, String lastName, String firstName,
+                String middleName, Integer age, boolean isWorker) {
+        if (!isValidId(id)) {
+            throw new IllegalArgumentException("Неверный формат ID.");
+        }
+        if (!isValidLogin(login)) {
+            throw new IllegalArgumentException("Неверный формат логина.");
+        }
+        if (!isValidPassword(password)) {
+            throw new IllegalArgumentException("Пароли не совпадают.");
+        }
+        if (!password.equals(confirmPassword)) {
+            throw new IllegalArgumentException("Passwords do not match.");
+        }
+        if (!isValidName(lastName) || !isValidName(firstName) ||
+                (middleName != null && !isValidName(middleName))) {
+            throw new IllegalArgumentException("Неверный формат имени.");
+        }
 
         this.id = id;
-        this.localDateTime = localDateTime;
+        this.dateAdded = dateAdded == null ? LocalDateTime.now() : dateAdded;
         this.login = login;
         this.password = password;
         this.confirmPassword = confirmPassword;
-        this.surname = surname;
-        this.name = name;
-        this.patronymic = patronymic;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
         this.age = age;
         this.isWorker = isWorker;
     }
 
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
+        if (!isValidId(id)) {
+            throw new IllegalArgumentException("Некорректный ID.");
+        }
         this.id = id;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
+    public LocalDateTime getDateAdded() {
+        return dateAdded;
     }
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
+
+    public void setDateAdded(LocalDateTime dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
     public String getLogin() {
         return login;
     }
+
     public void setLogin(String login) {
+        if (!isValidLogin(login)) {
+            throw new IllegalArgumentException("Некорректный логин.");
+        }
         this.login = login;
     }
 
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
+        if (!isValidPassword(password)) {
+            throw new IllegalArgumentException("Некорректный пароль.");
+        }
         this.password = password;
     }
 
     public String getConfirmPassword() {
         return confirmPassword;
     }
+
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
+    public void setLastName(String lastName) {
+        if (!isValidName(lastName)) {
+            throw new IllegalArgumentException("Некорректна фамилия");
+        }
+        this.lastName = lastName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getFirstName() {
+        return firstName;
     }
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+
+    public void setFirstName(String firstName) {
+        if (!isValidName(firstName)) {
+            throw new IllegalArgumentException("Некорректно имя");
+        }
+        this.firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        if (middleName != null && !isValidName(middleName)) {
+            throw new IllegalArgumentException("Некорректна фамилия");
+        }
+        this.middleName = middleName;
     }
 
     public Integer getAge() {
         return age;
     }
+
     public void setAge(Integer age) {
         this.age = age;
     }
 
-    public Boolean getWorker() {
+    public boolean isWorker() {
         return isWorker;
     }
-    public void setWorker(Boolean worker) {
+
+    public void setWorker(boolean worker) {
         isWorker = worker;
     }
 
-    @Override
-    public String toString() {
-        String localDateTimeString = localDateTime.format(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMATTER_PATTERN));
+    // Валидация данных
+    private boolean isValidId(String id) {
+        return id != null && Pattern.matches("[a-zA-Z0-9-]+", id);
+    }
 
-        return id + USER_PARAMS_DIVIDER +
-                localDateTimeString + USER_PARAMS_DIVIDER +
-                login + USER_PARAMS_DIVIDER +
-                password + USER_PARAMS_DIVIDER +
-                confirmPassword + USER_PARAMS_DIVIDER +
-                surname + USER_PARAMS_DIVIDER +
-                name + USER_PARAMS_DIVIDER +
-                patronymic + USER_PARAMS_DIVIDER +
-                age + USER_PARAMS_DIVIDER +
-                isWorker;
+    private boolean isValidLogin(String login) {
+        return login != null && Pattern.matches("[a-zA-Z0-9_]+", login) && login.length() < 20 && !login.matches("\\d+");
     }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(
-                getId(), user.getId())
-                && Objects.equals(getLocalDateTime(), user.getLocalDateTime())
-                && Objects.equals(getLogin(), user.getLogin())
-                && Objects.equals(getPassword(), user.getPassword())
-                && Objects.equals(getConfirmPassword(), user.getConfirmPassword())
-                && Objects.equals(getSurname(), user.getSurname())
-                && Objects.equals(getName(), user.getName())
-                && Objects.equals(getPatronymic(), user.getPatronymic())
-                && Objects.equals(getAge(), user.getAge())
-                && Objects.equals(isWorker, user.isWorker
-        );
+
+    private boolean isValidPassword(String password) {
+        return password != null && Pattern.matches("[a-zA-Z0-9_]+", password) && password.length() < 20 && !password.matches("[a-zA-Z_]+");
     }
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                getId(),
-                getLocalDateTime(),
-                getLogin(),
-                getPassword(),
-                getConfirmPassword(),
-                getSurname(),
-                getName(),
-                getPatronymic(),
-                getAge(),
-                isWorker
-        );
+
+    private boolean isValidName(String name) {
+        return name != null && name.matches("[а-яА-Яa-zA-Z]+");
     }
+
 }

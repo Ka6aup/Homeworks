@@ -1,219 +1,136 @@
 package attestation.attestation01.repositories;
 
-import attestation.attestation01.Helpers.FileWorkHelper;
-import attestation.attestation01.exceptions.UserNotFoundException;
 import attestation.attestation01.model.User;
 
-import java.io.FileOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.*;
-
-import static attestation.attestation01.Helpers.DataHandlerParserHelper.setUsersCollectionFromTheFile;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsersRepositoryFileImpl implements UsersRepository {
+    private static final String FILE_PATH = "src/attestation/attestation01/Users.TXT"; // Путь к файлу с данными пользователей
+    private final List<User> users;
+
+    public UsersRepositoryFileImpl(String filePath) {
+        this.users = new ArrayList<>();
+        loadUsersFromFile();
+    }
+
     @Override
     public void create(User user) {
-        FileWorkHelper.writeTheUserToTheFile(user.toString(), DATA_FILE_PATH, true);
-    }
-    public void create(User user, String path) {
-        FileWorkHelper.writeTheUserToTheFile(user.toString(), path, true);
+        users.add(user);
+        saveUsersToFile();
     }
 
     @Override
     public User findById(String id) {
-        try {
-            ArrayList<User> usersCollection = setUsersCollectionFromTheFile();
-            User targetUser = usersCollection.stream().filter(user -> Objects.equals(id, user.getId()))
-                    .findAny()
-                    .orElse(null);
-
-            if (Objects.isNull(targetUser)) {
-                throw new UserNotFoundException();
-            }
-
-            return targetUser;
-        } catch(UserNotFoundException error) {
-            throw new UserNotFoundException();
-        }
-    }
-    public User findById(String id, String path) {
-        try {
-            ArrayList<User> usersCollection = setUsersCollectionFromTheFile(path);
-            User targetUser = usersCollection.stream().filter(user -> Objects.equals(id, user.getId()))
-                    .findAny()
-                    .orElse(null);
-
-            if (Objects.isNull(targetUser)) {
-                throw new UserNotFoundException();
-            }
-
-            return targetUser;
-        } catch(UserNotFoundException error) {
-            throw new UserNotFoundException();
-        }
+        return users.stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь с указанным ID не найден"));
     }
 
     @Override
     public List<User> findAll() {
-        try {
-            return setUsersCollectionFromTheFile();
-        } catch(IllegalArgumentException error) {
-            System.err.println("Ошибка при запросе списка пользователей:\n" + error.getMessage() + "\n") ;
-            error.printStackTrace(System.out);
-        }
-
-        return null;
-    }
-    public List<User> findAll(String path) {
-        try {
-            return setUsersCollectionFromTheFile(path);
-        } catch(IllegalArgumentException error) {
-            System.err.println("Ошибка при запросе списка пользователей:\n" + error.getMessage() + "\n") ;
-            error.printStackTrace(System.out);
-        }
-
-        return null;
+        return new ArrayList<>(users);
     }
 
     @Override
     public void update(User user) {
-        try {
-            ArrayList<User> usersCollection = setUsersCollectionFromTheFile();
-
-            User targetUser = usersCollection.stream().filter(
-                            currentUser -> Objects.equals(currentUser.getId(), user.getId())
-                    )
-                    .findAny()
-                    .orElse(null);
-
-            if (Objects.isNull(targetUser)) {
-                System.out.println("Пользователя с заданным идентификатором не существует - будет создан новый пользователь");
-                FileWorkHelper.writeTheUserToTheFile(user.toString(), DATA_FILE_PATH, true);
-            } else {
-                List<User> updatedUsersCollection = setUsersCollectionFromTheFile().stream().map(currentUser ->
-                        Objects.equals(currentUser.getId(), user.getId())
-                                ? user : currentUser
-                ).toList();
-
-                deleteAll();
-
-                for (User currentUser : updatedUsersCollection) {
-                    if (Objects.isNull(currentUser)) break;
-
-                    FileWorkHelper.writeTheUserToTheFile(currentUser.toString(), DATA_FILE_PATH, true);
-                }
-
-                System.out.println("Обновление пользователя по id прошло успешно");
-            }
-        } catch(Exception e) {
-            System.err.println("Ошибка при обновлении:\n" + e.getMessage() + "\n") ;
-            e.printStackTrace(System.out);
-        }
-    }
-    public void update(User user, String path) {
-        try {
-            ArrayList<User> usersCollection = setUsersCollectionFromTheFile(path);
-
-            User targetUser = usersCollection.stream().filter(
-                            currentUser -> Objects.equals(currentUser.getId(), user.getId())
-                    )
-                    .findAny()
-                    .orElse(null);
-
-            if (Objects.isNull(targetUser)) {
-                System.out.println("Пользователя с заданным идентификатором не существует - будет создан новый пользователь");
-                FileWorkHelper.writeTheUserToTheFile(user.toString(), path, true);
-            } else {
-                List<User> updatedUsersCollection = setUsersCollectionFromTheFile(path).stream().map(currentUser ->
-                        Objects.equals(currentUser.getId(), user.getId())
-                                ? user : currentUser
-                ).toList();
-
-                deleteAll(path);
-
-                for (User currentUser : updatedUsersCollection) {
-                    if (Objects.isNull(currentUser)) break;
-
-                    FileWorkHelper.writeTheUserToTheFile(currentUser.toString(), path, true);
-                }
-
-                System.out.println("Обновление пользователя по id прошло успешно");
-            }
-        } catch(Exception e) {
-            System.err.println("Ошибка при обновлении:\n" + e.getMessage() + "\n") ;
-            e.printStackTrace(System.out);
+        int index = findUserIndexById(user.getId());
+        if (index != -1) {
+            users.set(index, user);
+            saveUsersToFile();
+        } else {
+            throw new IllegalArgumentException("Пользователь не найден");
         }
     }
 
     @Override
     public void deleteById(String id) {
-        try {
-            ArrayList<User> usersCollection = setUsersCollectionFromTheFile();
-            User targetUser = findById(id);
-
-            if (Objects.isNull(targetUser)) {
-                throw new UserNotFoundException();
-            }
-
-            List<User> updatedUsersCollection = usersCollection.stream().filter(
-                    user -> !Objects.equals(id, user.getId())
-            ).toList();
-
-            deleteAll();
-
-            for (User user : updatedUsersCollection) {
-                FileWorkHelper.writeTheUserToTheFile(user.toString(), DATA_FILE_PATH, true);
-            }
-
-            System.out.println("Удаление пользователя по id и обновление списка прошли успешно");
-        } catch(Exception e) {
-            System.err.println("Ошибка при удалении:\n" + e.getMessage() + "\n") ;
-            e.printStackTrace(System.out);
-        }
-    }
-    public void deleteById(String id, String path) {
-        try {
-            ArrayList<User> usersCollection = setUsersCollectionFromTheFile(path);
-            User targetUser = findById(id, path);
-
-            if (Objects.isNull(targetUser)) {
-                throw new UserNotFoundException();
-            }
-
-            List<User> updatedUsersCollection = usersCollection.stream().filter(
-                    user -> !Objects.equals(id, user.getId())
-            ).toList();
-
-            deleteAll(path);
-
-            for (User user : updatedUsersCollection) {
-                FileWorkHelper.writeTheUserToTheFile(user.toString(), path, true);
-            }
-
-            System.out.println("Удаление пользователя по id и обновление списка прошли успешно");
-        } catch(Exception e) {
-            System.err.println("Ошибка при удалении:\n" + e.getMessage() + "\n") ;
-            e.printStackTrace(System.out);
+        if (users.removeIf(user -> user.getId().equals(id))) {
+            saveUsersToFile();
+        } else {
+            throw new IllegalArgumentException("Пользователь с указанным ID не найден");
         }
     }
 
     @Override
     public void deleteAll() {
+        users.clear();
+        saveUsersToFile();
+    }
+
+    private void loadUsersFromFile() {
+        if (!Files.exists(Paths.get(FILE_PATH))) {
+            return;
+        }
         try {
-            new FileOutputStream(DATA_FILE_PATH).close();
-            System.out.println("Очистка файла прошла успешно");
-        } catch(IOException e) {
-            System.err.println("Ошибка при удалении:\n" + e.getMessage() + "\n"); ;
-            e.printStackTrace(System.out);
+            List<String> lines = Files.readAllLines(Paths.get(FILE_PATH));
+            for (String line : lines) {
+                User user = parseUser(line);
+                if (user != null) {
+                    users.add(user);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка чтения файла: " + e.getMessage());
         }
     }
-    public void deleteAll(String path) {
-        try {
-            new FileOutputStream(path).close();
-            System.out.println("Очистка файла прошла успешно");
-        } catch(IOException e) {
-            System.err.println("Ошибка при удалении:\n" + e.getMessage() + "\n"); ;
-            e.printStackTrace(System.out);
+
+    private void saveUsersToFile() {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(FILE_PATH))) {
+            for (User user : users) {
+                String userLine = serializeUser(user);
+                writer.write(userLine);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка записи в файл: " + e.getMessage());
         }
+    }
+
+    private User parseUser(String line) {
+        String[] parts = line.split("\\|");
+
+        String id = parts[0];
+        LocalDateTime dateAdded = LocalDateTime.parse(parts[1], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        String login = parts[2];
+        String password = parts[3];
+        String confirmPassword = parts[4];
+        String lastName = parts[5];
+        String firstName = parts[6];
+        String middleName = parts[7].isEmpty() ? null : parts[7];
+        Integer age = parts[8].isEmpty() ? null : Integer.parseInt(parts[8]);
+        boolean isWorker = Boolean.parseBoolean(parts[9]);
+
+        return new User(id, dateAdded, login, password, confirmPassword, lastName, firstName, middleName, age, isWorker);
+    }
+
+    private String serializeUser(User user) {
+        return String.join("|",
+                user.getId(),
+                user.getDateAdded().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                user.getLogin(),
+                user.getPassword(),
+                user.getConfirmPassword(),
+                user.getLastName(),
+                user.getFirstName(),
+                user.getMiddleName() == null ? "" : user.getMiddleName(),
+                user.getAge() == null ? "" : String.valueOf(user.getAge()),
+                String.valueOf(user.isWorker()));
+    }
+
+    private int findUserIndexById(String id) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
