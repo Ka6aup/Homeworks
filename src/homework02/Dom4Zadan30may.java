@@ -1,18 +1,19 @@
 package homework02;
 
+import java.util.Scanner;
+
 public class Dom4Zadan30may {
     public static void main(String[] args) {
 
-        int stb = 10;
-        int str = 10;
-        char k = '-';
-
-        for (int i = 0; i < str; i++) {
-            for (int j = 0; j < stb; j++) {
-                System.out.print(k);
-
-            }
-            System.out.println();
-        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Введите необходимый для таблицы символ: ");
+        String symbol = scanner.nextLine();
+        System.out.print("Введите необходимое число строк таблицы: ");
+        int num1 = scanner.nextInt();
+        System.out.print("Введите необходимое число столбцов таблицы: ");
+        int num2 = scanner.nextInt();
+        for (int i = 1; i <= num1; i++) {
+            var s = symbol.repeat(num2);
+            System.out.println(s); }
     }
 }
