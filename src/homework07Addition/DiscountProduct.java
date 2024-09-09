@@ -1,57 +1,52 @@
 package homework07Addition;
 
-import java.time.LocalDate;
-import java.util.StringJoiner;
+import java.util.Date;
+import java.util.Objects;
 
 public class DiscountProduct extends Product {
-    private double discountPercentage;
-    private double discountCost;
-    public LocalDate discountCostDate = LocalDate.now();
+    private int discount;
+    private Date discountExpirationDate = new Date(2012,10,13);
+    protected Date currentDate = new Date();
 
     public DiscountProduct() {
     }
-
-    public DiscountProduct(String productName, double cost, double discountPercentage) {
-        super(productName, cost);
-        this.discountPercentage = discountPercentage;
-        this.discountCost = (double) Math.round(this.getCost() - this.getCost() * this.getDiscountPercentage() / 100.0);
-        this.discountCostDate = this.discountCostDate.plusDays(20L);
+    public DiscountProduct(String productName, int price, int discount, boolean isKidAvailable) {
+        super(productName, price, isKidAvailable);
+        this.discount = discount;
     }
 
-    public double getDiscountPercentage() {
-        return this.discountPercentage;
+    public int getDiscount() {
+        return discount;
     }
-
-    public void setDiscountPercentage(double discountPercentage) {
-        this.discountPercentage = discountPercentage;
-    }
-
-    public double getDiscountCost(int age) {
-        if (age >= 65) {
-            throw new RuntimeException("Купил с дополнительной скидкой 5%: " + this.getProductName());
-        } else {
-            return this.discountCost;
+    @Override
+    public int getPrice(){
+        int cost = 0;
+        if(currentDate.compareTo(discountExpirationDate) <=0) {
+            double price = this.price - (this.price / 100 * discount);
+            cost = (int)price;
         }
-    }
-
-    public void setDiscountCost(double discountCost) {
-        this.discountCost = discountCost;
-    }
-
-    public LocalDate getDiscountCostLast() {
-        return this.discountCostDate;
-    }
-
-    public void setDiscountCostLast(LocalDate discountCostLast) {
-        this.discountCostDate = discountCostLast;
+        return cost;
     }
 
     @Override
+    public boolean isDiscountProduct() {
+        return super.isDiscountProduct = true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        DiscountProduct that = (DiscountProduct) o;
+        return discount == that.discount;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), discount);
+    }
+    @Override
     public String toString() {
-        return (new StringJoiner(" ", "", ""))
-                .add(this.getProductName() + " -")
-                .add("Скидка в % = " + this.discountPercentage)
-                .add("Цена со скидкой = " + this.discountCost)
-                .add("Скидка длиться до = " + this.discountCostDate).toString();
+        return super.getProductName() + "(" + getPrice() + "р " + this.discount + "%)";
     }
 }

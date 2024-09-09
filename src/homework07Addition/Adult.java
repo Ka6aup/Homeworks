@@ -1,20 +1,15 @@
 package homework07Addition;
-;
 
-public class Children extends Person {
-    public Children(String name, int money, int age) {
+
+public class Adult extends Person{
+    public Adult(String name, int money, int age, int creditPotential) {
         super(name, money);
         this.age = age;
+        this.creditPotential = creditPotential;
     }
-
     @Override
     public int tryToBySmth(Product currentProduct){
-        if (this.age< 6){
-            System.out.println(this.getName() + " Запрещена продажа товаров детям до 6 лет");
-            return 1;
-        }
-
-        if(this.getMoney()>=currentProduct.getPrice()){
+        if(this.getMoney() + creditPotential >= currentProduct.getPrice()){
             this.addProductsToBag(currentProduct);
             this.setMoney(this.getMoney() - currentProduct.getPrice());
             System.out.println(this.getName() + " купил " + currentProduct.getProductName());

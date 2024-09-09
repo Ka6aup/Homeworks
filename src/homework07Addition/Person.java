@@ -3,83 +3,71 @@ package homework07Addition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 public class Person {
     private String name;
-    private double cash;
-    private final List<Product> products = new ArrayList();
-    private int age;
+    private int money;
+    private List<Product> productsBag = new ArrayList<>();
+    protected int age;
+    protected int creditPotential;
 
-    public Person() {
+    public Person(){
     }
 
-    public Person(String name, double cash, int age) {
+    public Person(String name, int money) {
         this.name = name;
-        this.cash = cash;
-        this.age = age;
+        this.money = money;
     }
-
     public String getName() {
-        return this.name;
+        return name;
+    }
+    public List<Product> getProductsBag() {
+        return productsBag;
+    }
+    public void addProductsToBag(Product product) {
+        this.productsBag.add(product);
+    }
+    public int getMoney() {
+        return money;
+    }
+    public void setMoney(int money) {
+        this.money = money;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public double getCash() {
-        return this.cash;
-    }
 
-    public void setCash(double cash) {
-        this.cash = cash;
-    }
-
-    public List<Product> getProducts() {
-        return this.products;
-    }
-
-    public int getAge() {
-        return age;
+    public int tryToBySmth(Product currentProduct){
+        if(this.getMoney()>=currentProduct.getPrice()){
+            this.addProductsToBag(currentProduct);
+            this.setMoney(this.getMoney() - currentProduct.getPrice());
+            System.out.println(this.getName() + " купил " + currentProduct.getProductName());
+            return  0;
+        }
+        else{
+            System.out.println(this.getName() + " - не достаточно средств для покупки " + currentProduct.getProductName());
+            return 1;
+        }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (!(o instanceof Person)) {
-            return false;
-        } else {
-            Person person = (Person) o;
-            return Double.compare(person.getCash(), this.getCash()) == 0 && Objects.equals(this.getName(), person.getName());
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return money == person.money && Objects.equals(name, person.name) && Objects.equals(productsBag, person.productsBag);
     }
     @Override
-
     public int hashCode() {
-        return Objects.hash(new Object[]{this.getName(), this.getCash()});
+        return Objects.hash(name, money, productsBag);
     }
+
     @Override
     public String toString() {
-        return (new StringJoiner(", ", "", "")).add("Имя  '" + this.name + "'").add("Деньги = " + this.cash).toString();
-    }
-
-    public void byuProduct(Product product) {
-        if (this.age < 6) {
-            throw new IllegalArgumentException("Ограничение по возрасту: " + this.age);
-        } else if (product.getCost() > this.cash && !(this instanceof Man)) {
-            throw new IllegalArgumentException("Нехватает денег: " + product.getProductName());
-        } else if (product.getCost() > this.cash && this instanceof Man man) {
-            man.setCreditLine(man.getCreditLine() - product.getCost());
-            throw new IllegalArgumentException("Взял в кредит: " + product.getProductName() + "Осталось кредитных денег " + man.getCreditLine());
-        } else if (product instanceof DiscountProduct) {
-            DiscountProduct discountProduct = (DiscountProduct) product;
-            this.cash -= discountProduct.getDiscountCost(this.age);
-            throw new IllegalArgumentException("Купил со скидкой: " + product.getProductName());
-        } else {
-            this.cash -= product.getCost();
-            this.products.add(product);
+        String template = "\n имя - %s, осталось денег : %d, покупки: %s";
+        String productList = "Нет покупок";
+        if (!getProductsBag().isEmpty()) {
+            productList = String.format("Покупки: %s", getProductsBag().toString());
         }
+        return String.format(template, getName(), getMoney(), productList);
     }
 }

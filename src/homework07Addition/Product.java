@@ -1,56 +1,46 @@
 package homework07Addition;
+
 import java.util.Objects;
-import java.util.StringJoiner;
 
 public class Product {
     private String productName;
-    private double cost;
-    private boolean childrenOn;
+    protected int price;
+    protected boolean isDiscountProduct;
+    protected boolean isKidAvailable;
 
     public Product() {
     }
 
-    public Product(String productName, double cost) {
+    public Product(String productName, int price, boolean isKidAvailable) {
         this.productName = productName;
-        this.cost = cost;
+        this.price = price;
+        this.isKidAvailable = isKidAvailable;
     }
+
     public String getProductName() {
-        return this.productName;
+        return productName;
     }
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public int getPrice() {
+        return price;
     }
-    public double getCost() {
-        return this.cost;
-    }
-    public void setCost(double cost) {
-        this.cost = cost;
+
+    public boolean isDiscountProduct() {
+        return isDiscountProduct;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (!(o instanceof Product)) {
-            return false;
-        } else {
-            Product product = (Product) o;
-            return Double.compare(product.getCost(), this.getCost()) == 0 && Objects.equals(this.getProductName(), product.getProductName());
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return price == product.price && Objects.equals(productName, product.productName);
     }
     @Override
     public int hashCode() {
-        return Objects.hash(new Object[]{this.getProductName(), this.getCost()});
+        return Objects.hash(productName, price);
     }
     @Override
     public String toString() {
-        return (new StringJoiner(", ", Product.class.getSimpleName() + "[", "]"))
-                .add(this.productName + " -")
-                .add("Цена = " + this.cost).toString().replace(Product.class.getSimpleName(), "")
-                .replace(",", "")
-                .replace("[", "")
-                .replace("]", "")
-                .trim();
+        return  productName + '\'';
     }
-
 }
