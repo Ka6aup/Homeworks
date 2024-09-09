@@ -4,7 +4,7 @@ import java.util.StringJoiner;
 public class Program {
     private String nameProgram;
     private int ratingProgram;
-    private int viewerProgram;
+    private int countOfViewers;
 
     public Program() {
 
@@ -12,7 +12,7 @@ public class Program {
     public Program(String nameProgram) {
         this.nameProgram = nameProgram;
         this.ratingProgram = getRandomRatingProgram();
-        this.viewerProgram = getRandomViewerProgram();
+        this.countOfViewers = getRandomViewerProgram();
     }
     private int getRandomRatingProgram() {
         return (int) (Math.random() * 100);
@@ -20,11 +20,5 @@ public class Program {
     private int getRandomViewerProgram() {
         return (int) (Math.random() * 1000);
     }
-    public String toString() {
-        return new StringJoiner(", ", "" + "", "")
-                .add("Название программы = '" + nameProgram + "'")
-                .add("рейтинг программы = " + ratingProgram)
-                .add("viewerProgram = " + viewerProgram)
-                .toString();
-    }
+
 }

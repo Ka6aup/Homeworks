@@ -4,19 +4,19 @@ import java.util.StringJoiner;
 
 public class Television {
     private final String brand;
-    private final Chanel[] channels;
+    private final Channel[] channels;
     private int volume;
     private boolean turnOn;
-    private Chanel targetChanel;
+    private Channel targetChannel;
 
-    public Television(String brand, Chanel[] channels) {
+    public Television(String brand, Channel[] channels) {
         this.brand = brand;
         this.channels = channels;
     }
-    public Television(String brand, Chanel[] channels, Chanel targetChanel, int volume, boolean turnOn) {
+    public Television(String brand, Channel[] channels, Channel targetChannel, int volume, boolean turnOn) {
         this.brand = brand;
         this.channels = channels;
-        this.targetChanel = targetChanel;
+        this.targetChannel = targetChannel;
         this.volume = volume;
         this.turnOn = turnOn;
     }
@@ -32,27 +32,17 @@ public class Television {
     public void setTurnOn(boolean turnOn) {
         this.turnOn = turnOn;
     }
-    public Chanel getTargetChanel() {
-        return targetChanel;
+    public Channel getTargetChannel() {
+        return targetChannel;
     }
-    public void setTargetChanel(Chanel targetChanel) {
-        this.targetChanel = targetChanel;
+    public void setTargetChannel(Channel targetChannel) {
+        this.targetChannel = targetChannel;
     }
     public String getBrand() {
         return brand;
     }
-    public void changeChanel() {
-        targetChanel = channels[(int) (Math.random() * channels.length)];
-    }
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", "" + "", "")
-                .add("brand =  " + brand + "'")
-                .add("channels = " + Arrays.toString(channels))
-                .add("volume = " + volume)
-                .add("turnOn = " + turnOn)
-                .add("targetChanel = " + targetChanel)
-                .toString();
+    public void changeChannel() {
+        targetChannel = channels[(int) (Math.random() * channels.length)];
     }
 
 }
