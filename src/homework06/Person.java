@@ -1,58 +1,59 @@
 package homework06;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 public class Person {
     private String name;
-    private double money;
-    private Product[] products = new Product[10];
+    private int money;
+    private List<Product> productsBag = new ArrayList<>();
 
-    public Person() {
-    }
-
-    public Person(String name, double money) {
+    public Person(String name, int money) {
         this.name = name;
         this.money = money;
     }
+
     public String getName() {
         return name;
     }
-    public void setName(String name) {
-        this.name = name;
+
+    public List<Product> getProductsBag() {
+        return productsBag;
     }
-    public double getMoney() {
+
+    public void addProductsToBag(Product product) {
+        this.productsBag.add(product);
+    }
+
+    public int getMoney() {
         return money;
     }
-    public void setMoney(double money) {
+
+    public void setMoney(int money) {
         this.money = money;
     }
-    public Product[] getProducts() {
-        return products;
-    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Person person)) return false;
-        return Double.compare(person.getMoney(), getMoney()) == 0 && Objects.equals(getName(), person.getName());
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return money == person.money && Objects.equals(name, person.name) && Objects.equals(productsBag, person.productsBag);
     }
+
+    @Override
     public int hashCode() {
-        return Objects.hash(getName(), getMoney());
+        return Objects.hash(name, money, productsBag);
     }
+
+    @Override
     public String toString() {
-        return new StringJoiner(", ", "", "")
-                .add("Имя  '" + name + "'")
-                .add("Деньги = " + money)
-                .toString();
-    }
-    public void byuProduct(Product product) {
-        if (product.getPrice() > money) {
-            throw new RuntimeException("Не хватает денег");
+        String template = "Имя - %s, осталось денег - %d, %s";
+        String productList = "Нет покупок";
+        if (!getProductsBag().isEmpty()) {
+            productList = String.format("Покупки: %s", getProductsBag().toString());
         }
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] == null) {
-                products[i] = product;
-                return;
-            }
-        }
+        return String.format(template, getName(), getMoney(), productList);
     }
 }
