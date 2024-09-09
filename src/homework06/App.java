@@ -30,11 +30,11 @@ public class App {
 
 
 
-        LinkedList<Person> queue = new LinkedList(visitors);
+        LinkedList<Person> per = new LinkedList(visitors);
         Random randomProduct = new Random();
 
-        while (!queue.isEmpty()){
-            Person currentVisitor = queue.getFirst();
+        while (!per.isEmpty()){
+            Person currentVisitor = per.getFirst();
             Product currentProduct = productList.get(randomProduct.nextInt(productList.size()));
             if(currentVisitor.getMoney()>=currentProduct.getPrice()){
                 currentVisitor.addProductsToBag(currentProduct);
@@ -43,7 +43,7 @@ public class App {
             }
             else{
                 System.out.println(currentVisitor.getName() + " - не достаточно средств для покупки " + currentProduct.getProductName());
-                queue.removeFirst();
+                per.removeFirst();
             }
         }
 
@@ -53,7 +53,7 @@ public class App {
 
 
 
-    static String getPersonNameFromScaner(){
+    public static String getPersonNameFromScaner(){
         Scanner scanPersonName = new Scanner(System.in);
         String personName = scanPersonName.nextLine();
         System.out.println("Введите имя покупателя");
@@ -64,7 +64,7 @@ public class App {
         return personName;
     }
 
-    static int getPersonMoneyFromScaner(){
+    public static int getPersonMoneyFromScaner(){
         Scanner scanPersonMoney = new Scanner(System.in);
         int personMoney = scanPersonMoney.nextInt();
         System.out.println("Введите кол-во денег покупателя");
@@ -75,7 +75,7 @@ public class App {
         return personMoney;
     }
 
-    static String getProductNameFromScaner() {
+    public static String getProductNameFromScaner() {
         Scanner scanProductName = new Scanner(System.in);
         String productName = scanProductName.nextLine();
         System.out.println("Введите название продукта");
@@ -86,7 +86,7 @@ public class App {
         return productName;
     }
 
-    static int getProductPriceFromScanner(){
+    public static int getProductPriceFromScanner(){
         Scanner scanProductPrice = new Scanner(System.in);
         int productPrice = scanProductPrice.nextInt();
         System.out.println("Введите цену продукта");
