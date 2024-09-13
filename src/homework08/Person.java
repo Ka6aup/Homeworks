@@ -1,63 +1,120 @@
 package homework08;
-import java.io.Serializable;
-import java.util.*;
 
-public class Person implements Serializable {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Scanner;
+
+public class Person {
+    private static final int PRODUCT_BAG = 7;
     private String name;
-    private double cash;
-    private final List<Product> products = new ArrayList<>();
+    private double money;
 
-    public Person() {
-    }
+    private  Product[] productsPackage = new Product[PRODUCT_BAG];
 
-    public Person(String name, double cash) {
+    public Person() {}
+
+    public Person(String name, double money) {
         this.name = name;
-        this.cash = cash;
+        this.money = money;
     }
     public String getName() {
         return name;
     }
-    public void setName(String name) {
+
+    public double getMoney() {
+        return money;
+    }
+
+    public Product[] getProductsPackage() {
+        return productsPackage;
+    }
+
+
+    public void setName(String name) throws Exception {
+        if (Objects.equals(name, "")) {
+            throw new Exception("Имя покупателя не может быть пустой строкой");
+        }
+        this.name = name;
+
+    }
+
+    public void setName(Scanner scanner) throws Exception {
+        System.out.println("Введите имя покупателя:");
+        String name = scanner.nextLine();
+
+        if (Objects.equals(name, "")) {
+            throw new Exception("Имя покупателя не может быть пустой строкой");
+        }
         this.name = name;
     }
-    public double getCash() {
-        return cash;
+
+    public void setMoney(double money) throws Exception {
+        if (money < 0) {
+            throw new Exception("Деньги не могут быть отрицательным числом");
+        }
+        this.money = money;
     }
-    public void setCash(double cash) {
-        this.cash = cash;
+
+    public void setMoney(Scanner scanner) throws Exception {
+        System.out.println("Введите сумму денег, доступную пользователю");
+        double money = scanner.nextDouble();
+
+        if (money < 0) {
+            throw new Exception("Деньги не могут быть отрицательным числом");
+        }
+        this.money = money;
     }
-    public List<Product> getProducts() {
-        return products;
+
+    public String setProductsPackage(Product product) throws Exception {
+        if (this.money < product.getPrice()) {
+            var stringToPrint = this.name + " не может себе позволить " + product.getNameProduct();
+            System.out.println(stringToPrint);
+            return stringToPrint;
+        } else {
+            ArrayList<Product> products = new ArrayList<>(Arrays.asList(productsPackage));
+            products.add(product);
+
+            this.productsPackage = products.toArray(productsPackage);
+            var stringToPrint = this.name + " купил/а " + product.getNameProduct();
+            System.out.println(stringToPrint);
+
+
+            this.setMoney(money - product.getPrice());
+            return stringToPrint;
+        }
     }
+    public void buyProduct(Product product) {
+        if (this.money - product.getPrice() >=0) {
+            //products(Product product);
+            buyProduct(product);
+            System.out.println(name + " купил/а "+ product.getNameProduct());
+        } else {
+            System.out.println(name + " не может себе позволить " + product.getNameProduct());
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Person person)) return false;
-        return Double.compare(person.getCash(), getCash()) == 0 && Objects.equals(getName(), person.getName());
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return Double.compare(getMoney(), person.getMoney()) == 0 && Objects.equals(getName(), person.getName()) && Arrays.equals(getProductsPackage(), person.getProductsPackage());
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getCash());
+        int result = Objects.hash(getName(), getMoney());
+        result = 31 * result + Arrays.hashCode(getProductsPackage());
+        return result;
     }
+
     @Override
     public String toString() {
-        return new StringJoiner(", ",   "[", "]")
-                .add("" + name + "'")
-                .add("" + cash)
-                .add("" + products)
-                .toString()
-                .replace(",", "")
-                .replace("[", "")
-                .replace("]", "")
-                .replace("'", "")
-                .trim();
-
-
-    }
-    public void byuProduct(Product product) {
-        if (product.getCost() > cash) {
-            throw new RuntimeException("Нехватает денег");
-        }
-        products.add(product);
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", money=" + money +
+                ", productsPackage=" + Arrays.toString(productsPackage) +
+                '}';
     }
 }

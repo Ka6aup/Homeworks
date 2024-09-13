@@ -1,69 +1,80 @@
 package homework08;
-import java.io.File;
+
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
-public class App {
-    public static void main(String[] args) throws IOException {
-        File inputFilePerson = new File("D:\\Обучение\\DZ\\src\\homework08\\Person.txt");
-        File inputFileProduct = new File("D:\\Обучение\\DZ\\src\\homework08\\Product.txt");
-        File outputFileResult = new File("D:\\Обучение\\DZ\\src\\homework08\\Result.txt");
+public
 
-        Scanner s = new Scanner(inputFilePerson);
-        ArrayList<Person> personList = new ArrayList<Person>();
-        while (s.hasNextLine()) {
-            String[] line = s.nextLine().split("=");
-            personList.add(new Person(line[0], Double.parseDouble(line[1])));
+
+class App {
+    public static void main (String[]args) throws Exception {
+
+        List<String> lines = Files.readAllLines(Paths.get("src/homework08/InputFile.TXT"));
+        for (String stroka : lines) {
+            System.out.println(stroka);
         }
-        s.close();
-        personList.forEach(System.out::println);
+
+        try (var objectOutputStream = new OutputStreamWriter(new FileOutputStream("src/homework08/OutputFile.TXT", false), StandardCharsets.UTF_8);
+             Scanner scanner = new Scanner(System.in)) {
+            Person pavelAndreevich = new Person("Павел Андреевич", 10000);
+            Person annaPetrovna = new Person("Анна Петровна", 2000);
+            Person boris = new Person("Борис", 10);
+            Person zhenya = new Person("Женя", 0);
+            Person sveta = new Person("Света", -3);
 
 
-        s = new Scanner(inputFileProduct);
-        ArrayList<Product> productList = new ArrayList<Product>();
-        while (s.hasNextLine()) {
-            String[] line = s.nextLine().split("=");
-            productList.add(new Product(line[0], Double.parseDouble(line[1])));
-        }
-        s.close();
-        productList.forEach(System.out::println);
-        FileOutputStream outputStream = new FileOutputStream(outputFileResult);
+            Product bread = new Product("Хлеб", 40);
+            Product milk = new Product("Молоко", 60);
+            Product cake = new Product("Торт", 1000);
+            Product coffee = new Product("Кофе растворимый", 879);
+            Product oil = new Product("Масло", 150);
+            Product iceCream = new Product("Мороженное", 200);
+            Product pasta = new Product("Макароны", 800);
 
 
-        for (Person persons : personList) {
-            String buyerString = "Покупает: " + persons.getName();
-            System.out.println(buyerString);
-            writeFile(outputStream, buyerString);
-            if (persons.getCash() < 0) {
-                String str = "Отрицательное число денег";
-                System.out.println("Отрицательное число денег");
-                writeFile(outputStream, str);
-                continue;
-            }
-            if (persons.getCash() == 0) {
-                String str = "Нет денег";
-                System.out.println("Нет денег");
-                writeFile(outputStream, str);
-                continue;
-            }
-            try {
-                for (int i = 0; i < 3; i++) {
-                    Product product = productList.get((int) (Math.random() * productList.size()));
-                    persons.byuProduct(product);
-                    String buyString = "Купил: " + product.getProductName();
-                    System.out.println(buyString);
-                    writeFile(outputStream, buyString);
+            List<Person> personsCollection = Arrays.asList(pavelAndreevich, annaPetrovna, boris, zhenya, sveta);
+            List<Product> productsCollection = Arrays.asList(bread, milk, cake, coffee, oil, iceCream, pasta);
+
+            boolean isEnoughFlag = false;
+            var fileString = new StringBuilder();
+            for (int i = 0; i < productsCollection.size(); i++) {
+                if (isEnoughFlag) break;
+
+                for (int j = 0; j < personsCollection.size(); j++) {
+                    System.out.println(" Если Вы желаете прервать наполнение продуктовой корзины введите " + "END" + "\n" +
+                            " Для продолжения программы нажмите Enter");
+                    String deprivateCommand = scanner.nextLine();
+
+                    if (Objects.equals(deprivateCommand.trim(), "END")) {
+                        isEnoughFlag = true;
+                        break;
+                    }
+
+                    Person currentPerson = personsCollection.get(j);
+                    Product currentProduct = productsCollection.get(i);
+                    var stringToAppend = currentPerson.setProductsPackage(currentProduct);
+                    fileString.append(stringToAppend).append("\n");
+
+                    if (j == personsCollection.size() && i == productsCollection.size() && !isEnoughFlag) {
+                        isEnoughFlag = true;
+                    }
+
+
                 }
-            } catch (RuntimeException ex) {
-                System.out.println(ex.getMessage());
-                writeFile(outputStream, ex.getMessage());
             }
+
+
+            objectOutputStream.write(fileString.toString());
+        } catch (Exception e) {
+            System.out.println("ОШИБКА: Не удалось сохранить информацию в файл");
         }
-    }
-    private static void writeFile(FileOutputStream outputStream, String ex) throws IOException {
-        outputStream.write(ex.getBytes());
-        outputStream.write(System.lineSeparator().getBytes());
+
     }
 }
