@@ -117,4 +117,5 @@ public class Person {
                 ", productsPackage=" + Arrays.toString(productsPackage) +
                 '}';
     }
+
 }
