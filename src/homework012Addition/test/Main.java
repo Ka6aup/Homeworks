@@ -8,3 +8,4 @@ public class Main {
         gennadij.setAuthorizationCredentials("Krolik", "prdv6", "prdv6");
     }
 }
+

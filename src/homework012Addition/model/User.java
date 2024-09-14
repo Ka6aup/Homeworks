@@ -3,6 +3,7 @@ package homework012Addition.model;
 import homework012Addition.repository.WrongLoginException;
 import homework012Addition.repository.WrongPasswordException;
 
+
 import java.util.Objects;
 
 public class User {

@@ -8,3 +8,4 @@ public class WrongPasswordException extends IllegalArgumentException{
         super(errorMessage, err);
     }
 }
+

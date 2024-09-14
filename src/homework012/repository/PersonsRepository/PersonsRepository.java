@@ -1,5 +1,6 @@
 package homework012.repository.PersonsRepository;
 
+
 import homework012.model.Person;
 
 public interface PersonsRepository {

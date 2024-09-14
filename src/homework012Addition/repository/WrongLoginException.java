@@ -8,3 +8,4 @@ public class WrongLoginException extends IllegalArgumentException{
         super(errorMessage, err);
     }
 }
+

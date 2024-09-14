@@ -21,3 +21,4 @@ public class ScannerHelperRepositoryImpl implements ScannerHelperRepository {
         return scanner.nextLine();
     }
 }
+

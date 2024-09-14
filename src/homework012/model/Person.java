@@ -2,6 +2,7 @@ package homework012.model;
 
 import java.util.Objects;
 
+
 public class Person {
     private String surname;
     private String name;
