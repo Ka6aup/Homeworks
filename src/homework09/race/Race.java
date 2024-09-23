@@ -1,5 +1,5 @@
-package homework09.Race;
-import homework09.Car.Car;
+package homework09.race;
+import homework09.car.Car;
 
 import java.util.*;
 

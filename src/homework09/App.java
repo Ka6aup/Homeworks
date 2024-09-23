@@ -1,9 +1,9 @@
 package homework09;
-import homework09.Car.Car;
-import homework09.Car.PerformanceCar;
-import homework09.Car.ShowCar;
-import homework09.Garage.Garage;
-import homework09.Race.Race;
+import homework09.car.Car;
+import homework09.car.PerformanceCar;
+import homework09.car.ShowCar;
+import homework09.garage.Garage;
+import homework09.race.Race;
 
 import java.io.*;
 import java.util.ArrayList;

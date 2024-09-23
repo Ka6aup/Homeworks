@@ -1,4 +1,4 @@
-package homework09.Car;
+package homework09.car;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.StringJoiner;

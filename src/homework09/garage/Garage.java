@@ -1,5 +1,5 @@
-package homework09.Garage;
-import homework09.Car.Car;
+package homework09.garage;
+import homework09.car.Car;
 
 import java.util.List;
 import java.util.Objects;

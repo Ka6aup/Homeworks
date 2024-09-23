@@ -5,7 +5,7 @@ Car[brand='Mercedes', model='SLS', manufactureYear=2010, power=750, acceleration
 Машины спортивные ShowCar.Looking cool there. bro.:
 Car[brand='Dodge', model='Viper', manufactureYear=2015, power=645, acceleration=359, suspension=70, durability=10, stars=0]
 Car[brand='Lotus', model='Exile', manufactureYear=2001, power=190, acceleration=260, suspension=62, durability=20, stars=0]
-Машины в гараже: [Car[brand='Lamborghini', model='Hurricane', manufactureYear=2014, power=900, acceleration=380, suspension=67, durability=13, addOns=[]]]
+Машины в гараже: [Car[brand='Bugatti', model='Verona', manufactureYear=2006, power=1800, acceleration=420, suspension=66, durability=15, addOns=[]]]
 Тип гонок CasualRace
 Race[type='CasualRace', distance=60, route='route1', prizeFound=100000, cars=[]]
 Тип гонок DragRace

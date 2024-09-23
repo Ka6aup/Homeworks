@@ -1,4 +1,4 @@
-package homework09.Race;
+package homework09.race;
 import java.util.StringJoiner;
 
 public class DragRace extends Race {

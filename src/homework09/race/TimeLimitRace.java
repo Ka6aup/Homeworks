@@ -1,4 +1,4 @@
-package homework09.Race;
+package homework09.race;
 import java.util.Objects;
 import java.util.StringJoiner;
 
