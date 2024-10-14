@@ -1,0 +1,10 @@
+<FindBugsExecutable>
+    <Args>
+        <Arg>-classpath</Arg>
+        <Arg>${project.build.outputDirectory}</Arg>
+        <Arg>-jvmArgs</Arg>
+        <Arg>--module-path /path/to/jdk/lib/modules</Arg>
+        <Arg>-include</Arg>
+        <Arg>spotbugs.xml</Arg>
+    </Args>
+</FindBugsExecutable>
